@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(slam_robot)
+project(game_controller)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,22 +7,17 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
-install(
-  DIRECTORY launch/
-  DESTINATION share/${PROJECT_NAME}/launch
-)
-# config dazu wegen ros gazebo bridge! (sonst wirds nicht gefunden) 
-install(
- DIRECTORY launch model meshes config
- DESTINATION share/${PROJECT_NAME}/
-)
+add_executable(teleop_node src/teleop.cpp)
+ament_target_dependencies(teleop_node rclcpp geometry_msgs sensor_msgs)
+install(TARGETS
+  teleop_node
+  DESTINATION lib/${PROJECT_NAME})
 
-
-
+  
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights

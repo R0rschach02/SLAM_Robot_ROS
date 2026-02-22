@@ -1,79 +1,68 @@
 <?xml version="1.0" ?>
 <robot name="slam_robot" xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-<xacro:property name="body_color" value="Gazebo/ Dark Silver" />
+<xacro:property name="body_color" value="Gazebo/Gray" />
 
 <gazebo>
-  <plugin name="control" filename="libgazebo_ros_control.so"/>
+  <plugin name="gazebo_ros2_control" 
+        filename="libgazebo_ros2_control.so">
+  <parameters>$(find slam_robot)/config/controllers.yml</parameters>
+</plugin>
 </gazebo>
 <gazebo reference="base_link">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
+  <mu1>0.2</mu1> 
   <mu2>0.2</mu2>
   <self_collide>true</self_collide>
   <gravity>true</gravity>
 </gazebo>
 
-<gazebo reference="LeftMotor_1">
-  <material>Gazebo/Blue</material>
+<gazebo reference="MG995_1">
+  <material>Gazebo/Black</material>
   <mu1>0.2</mu1>
   <mu2>0.2</mu2>
   <self_collide>true</self_collide>
 </gazebo>
 
-<gazebo reference="RightMotor_1">
+<gazebo reference="LeftMotor_1">
   <material>Gazebo/Blue</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
   <self_collide>true</self_collide>
 </gazebo>
 
 <gazebo reference="LeftMiddleWheel_1">
   <material>Gazebo/Blue</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
+  <mu1>0.0</mu1>
+  <mu2>0.0</mu2>
   <self_collide>true</self_collide>
 </gazebo>
 
 <gazebo reference="LeftFrontWheel_1">
   <material>Gazebo/Blue</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <self_collide>true</self_collide>
-</gazebo>
-
-<gazebo reference="RightMiddleWheel_1">
-  <material>Gazebo/Blue</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
+  <mu1>0.0</mu1>
+  <mu2>0.0</mu2>
   <self_collide>true</self_collide>
 </gazebo>
 
 <gazebo reference="RightFrontWheel_1">
   <material>Gazebo/Blue</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
+  <mu1>0.0</mu1>
+  <mu2>0.0</mu2>
   <self_collide>true</self_collide>
 </gazebo>
 
-<gazebo reference="TrackbeltLeft_1">
-  <material>Gazebo/Black</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
+<gazebo reference="RightMiddleWheel_1">
+  <material>Gazebo/Blue</material>
+  <mu1>0.0</mu1>
+  <mu2>0.0</mu2>
   <self_collide>true</self_collide>
 </gazebo>
 
-<gazebo reference="TrackbeltRight_1">
-  <material>Gazebo/Black</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <self_collide>true</self_collide>
-</gazebo>
-
-<gazebo reference="MG995_1">
-  <material>Gazebo/Gray</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
+<gazebo reference="RightMotor_1">
+  <material>Gazebo/Blue</material>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
   <self_collide>true</self_collide>
 </gazebo>
 
@@ -85,7 +74,7 @@
 </gazebo>
 
 <gazebo reference="MG90S_1">
-  <material>Gazebo/Gray</material>
+  <material>Gazebo/Black</material>
   <mu1>0.2</mu1>
   <mu2>0.2</mu2>
   <self_collide>true</self_collide>
@@ -99,10 +88,39 @@
 </gazebo>
 
 <gazebo reference="TFLunaBenewake_1">
-  <material>Gazebo/Gray</material>
+  <material>Gazebo/Black</material>
   <mu1>0.2</mu1>
   <mu2>0.2</mu2>
   <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo>
+<plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
+  <ros>
+    <namespace>/</namespace>
+      <remapping>cmd_vel:=/cmd_vel</remapping>
+      <remapping>odom:=/odom</remapping>
+  </ros>
+
+  <num_wheel_pairs>1</num_wheel_pairs>
+
+  <!-- Trackbelts als Antrieb -->
+  <left_joint>RightWheelMotion</left_joint>
+  <right_joint>LeftWheelMotion</right_joint>
+
+  <wheel_separation>0.14</wheel_separation>
+  <wheel_diameter>0.05</wheel_diameter>
+
+  <max_wheel_torque>10.0</max_wheel_torque>
+  <max_wheel_acceleration>5.0</max_wheel_acceleration>
+
+  <publish_odom>true</publish_odom>
+  <publish_odom_tf>true</publish_odom_tf>
+  <publish_wheel_tf>true</publish_wheel_tf>
+
+  <odometry_frame>odom</odometry_frame>
+  <robot_base_frame>base_link</robot_base_frame>
+</plugin>
 </gazebo>
 
 </robot>

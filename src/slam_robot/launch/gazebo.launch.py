@@ -25,24 +25,15 @@ def generate_launch_description():
         ]
     )
 
-    joint_state_publisher_node = Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_state_publisher'
-    )
-
     gazebo_server = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare('gazebo_ros'),
-                'launch',
-                'gzserver.launch.py'
-            ])
-        ]),
-        launch_arguments={
-            'pause': 'true'
-        }.items()
-    )
+    PythonLaunchDescriptionSource([
+        PathJoinSubstitution([
+            FindPackageShare('gazebo_ros'),
+            'launch',
+            'gzserver.launch.py'
+        ])
+    ])
+)
 
     gazebo_client = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -64,10 +55,25 @@ def generate_launch_description():
         output='screen'
     )
 
+    load_joint_state_broadcaster = Node(
+    package='controller_manager',
+    executable='spawner',
+    arguments=['joint_state_broadcaster'],
+    )
+
+    load_pan_tilt_controller = Node(
+    package='controller_manager',
+    executable='spawner',
+    arguments=['pan_tilt_controller'],
+    )
+
+    
+
     return LaunchDescription([
-        robot_state_publisher_node,
-        joint_state_publisher_node,
-        gazebo_server,
-        gazebo_client,
-        urdf_spawn_node,
-    ])
+    gazebo_server,       # 1. Gazebo Server
+    gazebo_client,       # 2. Gazebo Client  
+    robot_state_publisher_node,  # 3. RSP
+    urdf_spawn_node,     # 4. Roboter spawnen
+    load_joint_state_broadcaster,  # 5. erst dann Controller
+    load_pan_tilt_controller,      # 6.
+])

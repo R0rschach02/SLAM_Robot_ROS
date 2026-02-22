@@ -1,20 +1,9 @@
 <?xml version="1.0" ?>
 <robot name="slam_robot" xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-<transmission name="Umdrehung 1_tran">
-  <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Umdrehung 1">
-    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-  </joint>
-  <actuator name="Umdrehung 1_actr">
-    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
-  </actuator>
-</transmission>
-
 <transmission name="Umdrehung 2_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Umdrehung 2">
+  <joint name="LeftWheelMotion">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
   <actuator name="Umdrehung 2_actr">
@@ -23,23 +12,34 @@
   </actuator>
 </transmission>
 
-<transmission name="Umdrehung 10_tran">
+<transmission name="Umdrehung 7_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Umdrehung 10">
+  <joint name="RightWheelMotion">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
-  <actuator name="Umdrehung 10_actr">
+  <actuator name="Umdrehung 7_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
 </transmission>
 
-<transmission name="Umdrehung 12_tran">
+<transmission name="Umdrehung 8_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Umdrehung 12">
+  <joint name="PanMotion">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
-  <actuator name="Umdrehung 12_actr">
+  <actuator name="Umdrehung 8_actr">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="Umdrehung 10_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="TiltMotion">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="Umdrehung 10_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
