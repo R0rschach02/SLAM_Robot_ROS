@@ -9,3 +9,4 @@ __pycache__/
 .vscode/
 # local config
 *.swp
+.aider*
