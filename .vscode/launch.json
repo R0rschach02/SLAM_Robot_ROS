@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug ROS2 Python node",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/slam_robot_py/slam_robot_py/cmd_vel_listener.py",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    },
+    {
+      "name": "Attach to C++ (gdb) - run exe then attach",
+      "type": "cppdbg",
+      "request": "attach",
+      "program": "/home/seriousjoke/slam_robot_ws/install/slam_robot_cpp/lib/slam_robot_cpp/cmd_vel_listener", 
+      "processId": "${command:pickProcess}",
+      "MIMode": "gdb"
+    }
+  ]
+}
