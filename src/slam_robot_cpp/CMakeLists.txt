@@ -11,18 +11,27 @@ find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)   # WICHTIG: Für Odometry Messages
 find_package(tf2 REQUIRED)        # WICHTIG: Für Quaternion/Matrix Mathe
+find_package(Eigen3 REQUIRED)
+find_package(std_msgs REQUIRED)
 
-# 2. Executable für den Logger definieren
-# Wir bauen ein EIGENES Programm nur für den Debugger
-add_executable(drive_debugger src/debug_logger.cpp)
+# Neues Executable für den Pan-Tilt Node
+add_executable(pan_tilt_node
+  src/pan_tilt_node.cpp
+  src/GazeboMotorController.cpp
+  src/WorkspaceSafety.cpp
+)
 
-# 3. Abhängigkeiten verknüpfen
-# Hier darf NUR stehen, was oben bei 'find_package' gefunden wurde
-ament_target_dependencies(drive_debugger
+# Eigen3 Header einbinden
+target_include_directories(pan_tilt_node PUBLIC
+  include/
+  ${EIGEN3_INCLUDE_DIR}
+)
+
+# Abhängigkeiten verknüpfen
+ament_target_dependencies(pan_tilt_node
   rclcpp
+  std_msgs
   geometry_msgs
-  nav_msgs
-  tf2
 )
 
 # Falls du den cmd_vel_listener auch noch brauchst, musst du ihn SEPARAT definieren:
@@ -32,7 +41,7 @@ ament_target_dependencies(drive_debugger
 # 4. Installieren (Damit 'ros2 run' es findet)
 install(TARGETS
   drive_debugger
-  # cmd_vel_listener (falls aktiviert)
+  pan_tilt_node
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

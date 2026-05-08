@@ -1,0 +1,11 @@
+{
+    "name": "ROS2 SLAM Rover Dev",
+    "build": { "dockerfile": "Dockerfile" },
+    "runArgs": ["--gpus", "all", "--network=host"], // Wichtig für GPU und ROS-Kommunikation
+    "extensions": [
+        "ms-iot.vscode-ros",
+        "ms-vscode.cpptools",
+        "python.python"
+    ],
+    "remoteUser": "root"
+}

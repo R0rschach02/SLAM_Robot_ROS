@@ -7,6 +7,7 @@ struct JointAngles {
     double tilt;
 };
 
+
 class IMotorController {
 public:
     virtual void setAngles(double pan, double tilt) = 0;
