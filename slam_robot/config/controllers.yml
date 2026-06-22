@@ -1,13 +1,57 @@
+# ==============================================
+# ros2_control Controller-Konfiguration
+# ==============================================
+
 controller_manager:
     ros__parameters:
-        update_rate: 50
+        update_rate: 50 # Hz
 
         joint_state_broadcaster:
             type: joint_state_broadcaster/JointStateBroadcaster
 
+        diff_drive_controller:
+            type: diff_drive_controller/DiffDriveController
+
         pan_tilt_controller:
             type: position_controllers/JointGroupPositionController
 
+# ----------------------------------------------
+# Diff-Drive-Controller
+# Setzt /cmd_vel (Twist) in Wheel-Velocities um
+# ----------------------------------------------
+diff_drive_controller:
+    ros__parameters:
+        publish_rate: 50.0
+
+        # Joint-Namen — MÜSSEN mit URDF übereinstimmen
+        left_wheel_names: ["LeftWheelMotion"]
+        right_wheel_names: ["RightWheelMotion"]
+
+        # Kinematik
+        wheel_separation: 0.14 # Meter (von deinem alten diff_drive-Plugin)
+        wheel_radius: 0.025 # Meter (von wheel_diameter 0.05)
+
+        # Begrenzungen
+        max_wheel_linear_velocity: 1.0
+        max_wheel_angular_velocity: 5.0
+
+        # TF-Publishing (ersetzt das alte diff_drive-Plugin-Verhalten)
+        publish_cmd: true
+        publish_wheel_tf: true
+
+        # Odometry
+        open_loop: false # false = echte Wheel-Odometry aus Gazebo
+        enable_odom_tf: true # published odom → base_link
+        odom_frame_id: odom
+        base_frame_id: base_link
+
+        # Covariance (für später mit robot_localization)
+        pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+        twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+
+# ----------------------------------------------
+# Pan-Tilt Position Controller
+# ----------------------------------------------
 pan_tilt_controller:
     ros__parameters:
         joints:
