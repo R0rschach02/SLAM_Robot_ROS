@@ -2,7 +2,6 @@
 <robot name="slam_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 <xacro:include filename="$(find slam_robot)/model/materials.xacro" />
-<xacro:include filename="$(find slam_robot)/model/slam_robot.trans" />
 <xacro:include filename="$(find slam_robot)/model/slam_robot.gazebo" />
 
 <link name="base_link">
@@ -26,6 +25,24 @@
     </geometry>
   </collision>
 </link>
+
+<!-- ============================================== -->
+<!-- IMU LINK (MPU6050 + QMC5883L in real hardware) -->
+<!-- ============================================== -->
+<link name="imu_link">
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.005"/>
+    <inertia ixx="0.000001" iyy="0.000001" izz="0.000001"
+             ixy="0" iyz="0" ixz="0"/>
+  </inertial>
+</link>
+
+<joint name="imu_mount_joint" type="fixed">
+  <origin xyz="0 0 0.02" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="imu_link"/>
+</joint>
 
 <link name="MG995_1">
   <inertial>
@@ -336,15 +353,34 @@
   <child link="TFLunaBenewake_1"/>
 </joint>
 
+<!-- ============================================== -->
+<!-- ros2_control: Gazebo System                    -->
+<!-- ============================================== -->
 <ros2_control name="GazeboSystem" type="system">
   <hardware>
     <plugin>gazebo_ros2_control/GazeboSystem</plugin>
   </hardware>
+
+  <!-- Antriebsräder (Velocity-Command) -->
+  <joint name="LeftWheelMotion">
+    <command_interface name="velocity"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <joint name="RightWheelMotion">
+    <command_interface name="velocity"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <!-- Pan-Tilt (Position-Command) -->
   <joint name="PanMotion">
     <command_interface name="position"/>
     <state_interface name="position"/>
     <state_interface name="velocity"/>
   </joint>
+
   <joint name="TiltMotion">
     <command_interface name="position"/>
     <state_interface name="position"/>

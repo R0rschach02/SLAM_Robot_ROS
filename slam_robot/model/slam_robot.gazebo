@@ -94,33 +94,63 @@
   <self_collide>true</self_collide>
 </gazebo>
 
-<gazebo>
-<plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
-  <ros>
-    <namespace>/</namespace>
-      <remapping>cmd_vel:=/cmd_vel</remapping>
-      <remapping>odom:=/odom</remapping>
-  </ros>
+<!-- ============================================== -->
+<!-- TF-Luna als 1-Punkt-LaserScan-Sensor           -->
+<!-- ============================================== -->
+<gazebo reference="TFLunaBenewake_1">
+  <sensor name="tfluna_sensor" type="ray">
+    <ray>
+      <scan>
+        <horizontal>
+          <samples>1</samples>
+          <resolution>1</resolution>
+          <min_angle>0</min_angle>
+          <max_angle>0</max_angle>
+        </horizontal>
+        <vertical>
+          <samples>1</samples>
+          <resolution>1</resolution>
+          <min_angle>0</min_angle>
+          <max_angle>0</max_angle>
+        </vertical>
+      </scan>
+      <range>
+        <min>0.2</min>
+        <max>8.0</max>
+        <resolution>0.01</resolution>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </range>
+    </ray>
+    <update_rate>100</update_rate>
+    <plugin name="tfluna_plugin" filename="libgazebo_ros_ray_sensor.so">
+      <ros>
+        <remapping>~/out:=/tfluna/scan</remapping>
+      </ros>
+      <output_type>sensor_msgs/LaserScan</output_type>
+    </plugin>
+  </sensor>
+</gazebo>
 
-  <num_wheel_pairs>1</num_wheel_pairs>
-
-  <!-- Trackbelts als Antrieb -->
-  <left_joint>RightWheelMotion</left_joint>
-  <right_joint>LeftWheelMotion</right_joint>
-
-  <wheel_separation>0.14</wheel_separation>
-  <wheel_diameter>0.05</wheel_diameter>
-
-  <max_wheel_torque>10.0</max_wheel_torque>
-  <max_wheel_acceleration>5.0</max_wheel_acceleration>
-
-  <publish_odom>true</publish_odom>
-  <publish_odom_tf>true</publish_odom_tf>
-  <publish_wheel_tf>true</publish_wheel_tf>
-
-  <odometry_frame>odom</odometry_frame>
-  <robot_base_frame>base_link</robot_base_frame>
-</plugin>
+<!-- ============================================== -->
+<!-- IMU-Sensor (simuliert MPU6050)                 -->
+<!-- ============================================== -->
+<gazebo reference="imu_link">
+  <sensor name="imu_sensor" type="imu">
+    <always_on>true</always_on>
+    <update_rate>200</update_rate>
+    <plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+      <ros>
+        <namespace>/</namespace>
+        <remapping>~/out:=/imu/data</remapping>
+      </ros>
+      <frame_name>imu_link</frame_name>
+      <initial_orientation_as_reference>false</initial_orientation_as_reference>
+    </plugin>
+  </sensor>
 </gazebo>
 
 </robot>
